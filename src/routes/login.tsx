@@ -9,7 +9,7 @@ import loginArt from "@/assets/login-3d.png";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Sign in — LumenFolio" },
+      { title: "Sign in — SPking" },
       { name: "description", content: "Sign in to manage your project portfolio." },
     ],
   }),
@@ -112,7 +112,7 @@ function LoginPage() {
               <Sparkles className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="font-display text-lg font-bold">
-              Lumen<span className="gradient-text">Folio</span>
+              SPking
             </span>
           </div>
 

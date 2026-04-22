@@ -9,7 +9,7 @@ import { trackVisit } from "@/lib/analytics";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Projects — LumenFolio" },
+      { title: "Projects — SPking" },
       {
         name: "description",
         content: "Explore featured SaaS projects with live demos and source code.",

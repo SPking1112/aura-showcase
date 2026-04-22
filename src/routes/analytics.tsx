@@ -9,7 +9,7 @@ import { loadVisits } from "@/lib/analytics";
 export const Route = createFileRoute("/analytics")({
   head: () => ({
     meta: [
-      { title: "Analytics — LumenFolio" },
+      { title: "Analytics — SPking" },
       { name: "description", content: "Project visit analytics." },
     ],
   }),

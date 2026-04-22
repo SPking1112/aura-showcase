@@ -17,7 +17,7 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin — LumenFolio" },
+      { title: "Admin — SPking" },
       { name: "description", content: "Manage your project portfolio." },
     ],
   }),

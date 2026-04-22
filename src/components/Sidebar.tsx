@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutGrid, Shield, Sparkles, X, BarChart3 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import logo from "@/assets/logo.png";
 
 export function Sidebar({
   open,
@@ -38,10 +39,14 @@ export function Sidebar({
           <div className="mb-10 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2.5">
               <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-2xl shadow-glow">
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
-              </div>
+  <img
+  src={logo}
+  alt="Logo"
+  className="h-6 w-6 object-contain"
+/>
+</div>
               <span className="font-display text-xl font-bold tracking-tight">
-                Lumen<span className="gradient-text">Folio</span>
+                SPking
               </span>
             </Link>
             <button

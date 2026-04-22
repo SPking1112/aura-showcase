@@ -1,5 +1,6 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import logoFavicon from "../assets/logo.png";
 import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/theme";
 import { Toaster } from "@/components/ui/sonner";
@@ -9,13 +10,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "LumenFolio — SaaS Project Portal" },
+      { title: "SPking — SaaS Project Portal" },
       {
         name: "description",
         content:
           "A modern SaaS-style project portfolio with glassmorphism UI, smooth animations, and a beautiful 3D login experience.",
       },
-      { property: "og:title", content: "LumenFolio — SaaS Project Portal" },
+      { property: "og:title", content: "SPking — SaaS Project Portal" },
       {
         property: "og:description",
         content: "A modern SaaS-style project portfolio with glassmorphism UI.",
@@ -27,6 +28,7 @@ export const Route = createRootRoute({
       },
     ],
     links: [
+      { rel: "icon", href: logoFavicon, type: "image/png" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
