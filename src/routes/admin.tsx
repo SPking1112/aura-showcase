@@ -190,7 +190,12 @@ function ProjectForm({
     if (stack.length === 0) next.techStack = "At least one tech is required";
     if (data.liveUrl && !isValidUrl(data.liveUrl)) next.liveUrl = "Invalid URL";
     if (data.githubUrl && !isValidUrl(data.githubUrl)) next.githubUrl = "Invalid URL";
-    if (data.imageUrl && !isValidUrl(data.imageUrl)) next.imageUrl = "Invalid URL";
+    if (
+      data.imageUrl &&
+      !data.imageUrl.startsWith("data:") &&
+      !isValidUrl(data.imageUrl)
+    )
+      next.imageUrl = "Invalid image URL";
     setErrors(next);
     if (Object.keys(next).length) return;
     onSubmit({ ...data, techStack: stack });
@@ -271,14 +276,11 @@ function ProjectForm({
             />
           </FormField>
 
-          <FormField label="Image URL" error={errors.imageUrl}>
-            <input
-              value={data.imageUrl}
-              onChange={(e) => update("imageUrl", e.target.value)}
-              placeholder="https://…"
-              className="w-full bg-transparent outline-none"
-            />
-          </FormField>
+          <ImageInput
+            value={data.imageUrl}
+            onChange={(v) => update("imageUrl", v)}
+            error={errors.imageUrl}
+          />
         </div>
 
         <div className="mt-6 flex gap-3">
