@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Eye, EyeOff, LogIn, AlertCircle, ArrowLeft, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { Background } from "@/components/Background";
 import loginArt from "@/assets/login-3d.png";
@@ -53,9 +54,12 @@ function LoginPage() {
     setLoading(true);
     try {
       await login(username, password);
+      toast.success("Welcome back!");
       navigate({ to: "/admin" });
     } catch (err) {
-      setErrors({ form: err instanceof Error ? err.message : "Login failed" });
+      const msg = err instanceof Error ? err.message : "Login failed";
+      setErrors({ form: msg });
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -171,10 +175,6 @@ function LoginPage() {
               {loading ? "Signing in…" : "Sign In"}
             </button>
 
-            <p className="text-center text-xs text-muted-foreground">
-              Try <span className="font-mono font-semibold">admin</span> /{" "}
-              <span className="font-mono font-semibold">1234</span>
-            </p>
           </form>
         </div>
       </div>

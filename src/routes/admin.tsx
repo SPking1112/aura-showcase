@@ -4,6 +4,8 @@ import { Plus, Pencil, Trash2, X, AlertCircle, Save } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { SmartImage } from "@/components/SmartImage";
+import { ImageInput } from "@/components/ImageInput";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useAuth } from "@/lib/auth";
 import {
   loadProjects,
@@ -37,6 +39,7 @@ function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editing, setEditing] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     setProjects(loadProjects());
@@ -63,9 +66,10 @@ function AdminPage() {
     setEditing(null);
   };
 
-  const onDelete = (id: string) => {
-    if (!confirm("Delete this project?")) return;
-    persist(projects.filter((p) => p.id !== id));
+  const confirmDelete = () => {
+    if (!deleteId) return;
+    persist(projects.filter((p) => p.id !== deleteId));
+    setDeleteId(null);
     toast.success("Project deleted");
   };
 
@@ -122,7 +126,7 @@ function AdminPage() {
                     <Pencil className="h-3.5 w-3.5" /> Edit
                   </button>
                   <button
-                    onClick={() => onDelete(p.id)}
+                    onClick={() => setDeleteId(p.id)}
                     className="flex items-center justify-center gap-1.5 rounded-xl bg-destructive/15 px-3 py-2 text-xs font-semibold text-destructive transition-smooth hover:bg-destructive/25"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -145,6 +149,16 @@ function AdminPage() {
           onSubmit={onSubmit}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteId}
+        title="Delete this project?"
+        description="This action cannot be undone."
+        confirmLabel="Delete"
+        destructive
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteId(null)}
+      />
     </AppShell>
   );
 }
@@ -176,7 +190,12 @@ function ProjectForm({
     if (stack.length === 0) next.techStack = "At least one tech is required";
     if (data.liveUrl && !isValidUrl(data.liveUrl)) next.liveUrl = "Invalid URL";
     if (data.githubUrl && !isValidUrl(data.githubUrl)) next.githubUrl = "Invalid URL";
-    if (data.imageUrl && !isValidUrl(data.imageUrl)) next.imageUrl = "Invalid URL";
+    if (
+      data.imageUrl &&
+      !data.imageUrl.startsWith("data:") &&
+      !isValidUrl(data.imageUrl)
+    )
+      next.imageUrl = "Invalid image URL";
     setErrors(next);
     if (Object.keys(next).length) return;
     onSubmit({ ...data, techStack: stack });
@@ -257,14 +276,11 @@ function ProjectForm({
             />
           </FormField>
 
-          <FormField label="Image URL" error={errors.imageUrl}>
-            <input
-              value={data.imageUrl}
-              onChange={(e) => update("imageUrl", e.target.value)}
-              placeholder="https://…"
-              className="w-full bg-transparent outline-none"
-            />
-          </FormField>
+          <ImageInput
+            value={data.imageUrl}
+            onChange={(v) => update("imageUrl", v)}
+            error={errors.imageUrl}
+          />
         </div>
 
         <div className="mt-6 flex gap-3">

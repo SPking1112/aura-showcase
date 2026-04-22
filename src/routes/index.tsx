@@ -4,6 +4,7 @@ import { ExternalLink, Github, Search, FolderOpen } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { SmartImage } from "@/components/SmartImage";
 import { loadProjects, isValidUrl, type Project } from "@/lib/projects";
+import { trackVisit } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,7 +47,8 @@ function ProjectsPage() {
     <AppShell title="Projects">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
-          {projects.length} project{projects.length === 1 ? "" : "s"} in your showcase
+          Showing {filtered.length} Project{filtered.length === 1 ? "" : "s"}
+          {query && projects.length !== filtered.length ? ` of ${projects.length}` : ""}
         </p>
         <div className="glass relative flex items-center rounded-2xl px-4 py-2 sm:w-80">
           <Search className="h-4 w-4 text-muted-foreground" />
@@ -120,6 +122,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             label="Live Demo"
             icon={<ExternalLink className="h-3.5 w-3.5" />}
             primary
+            onClick={() => trackVisit(project.id)}
           />
           <ActionButton
             href={project.githubUrl}
@@ -139,12 +142,14 @@ function ActionButton({
   label,
   icon,
   primary,
+  onClick,
 }: {
   href: string;
   enabled: boolean;
   label: string;
   icon: React.ReactNode;
   primary?: boolean;
+  onClick?: () => void;
 }) {
   const base =
     "inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-smooth";
@@ -163,6 +168,7 @@ function ActionButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onClick}
       className={
         primary
           ? `${base} gradient-primary text-primary-foreground hover:shadow-glow`
