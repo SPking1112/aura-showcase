@@ -1,10 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Shield, Sparkles, X } from "lucide-react";
-
-const items = [
-  { to: "/", label: "Projects", icon: LayoutGrid },
-  { to: "/admin", label: "Admin", icon: Shield },
-] as const;
+import { LayoutGrid, Shield, Sparkles, X, BarChart3 } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export function Sidebar({
   open,
@@ -14,10 +10,18 @@ export function Sidebar({
   onClose: () => void;
 }) {
   const loc = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  const items = [
+    { to: "/", label: "Projects", icon: LayoutGrid, requireAuth: false },
+    { to: "/admin", label: "Admin", icon: Shield, requireAuth: true },
+    { to: "/analytics", label: "Analytics", icon: BarChart3, requireAuth: true },
+  ] as const;
+
+  const visibleItems = items.filter((i) => !i.requireAuth || isAuthenticated);
 
   return (
     <>
-      {/* Mobile overlay */}
       <div
         onClick={onClose}
         className={`fixed inset-0 z-30 bg-black/30 backdrop-blur-sm transition-opacity lg:hidden ${
@@ -50,7 +54,7 @@ export function Sidebar({
           </div>
 
           <nav className="flex flex-col gap-2">
-            {items.map(({ to, label, icon: Icon }) => {
+            {visibleItems.map(({ to, label, icon: Icon }) => {
               const active =
                 to === "/" ? loc.pathname === "/" : loc.pathname.startsWith(to);
               return (
@@ -72,12 +76,8 @@ export function Sidebar({
           </nav>
 
           <div className="mt-auto">
-            <div className="glass rounded-2xl p-4 text-sm">
-              <p className="font-semibold">Demo credentials</p>
-              <p className="mt-1 text-muted-foreground">
-                <span className="font-mono">admin</span> /{" "}
-                <span className="font-mono">1234</span>
-              </p>
+            <div className="glass rounded-2xl p-4 text-xs text-muted-foreground">
+              Crafted with care — toggle the theme from the top bar.
             </div>
           </div>
         </div>
