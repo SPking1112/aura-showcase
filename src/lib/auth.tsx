@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (u: string, p: string) => {
     await new Promise((r) => setTimeout(r, 400));
     if (u.trim() !== ADMIN_USER || p !== ADMIN_PASS) {
-      throw new Error("Invalid credentials. Try admin / 1234");
+      throw new Error("Invalid credentials");
     }
     localStorage.setItem(AUTH_KEY, JSON.stringify({ username: u }));
     setUsername(u);
