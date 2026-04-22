@@ -4,6 +4,8 @@ import { Plus, Pencil, Trash2, X, AlertCircle, Save } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { SmartImage } from "@/components/SmartImage";
+import { ImageInput } from "@/components/ImageInput";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useAuth } from "@/lib/auth";
 import {
   loadProjects,
@@ -37,6 +39,7 @@ function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editing, setEditing] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     setProjects(loadProjects());
@@ -63,9 +66,10 @@ function AdminPage() {
     setEditing(null);
   };
 
-  const onDelete = (id: string) => {
-    if (!confirm("Delete this project?")) return;
-    persist(projects.filter((p) => p.id !== id));
+  const confirmDelete = () => {
+    if (!deleteId) return;
+    persist(projects.filter((p) => p.id !== deleteId));
+    setDeleteId(null);
     toast.success("Project deleted");
   };
 
@@ -122,7 +126,7 @@ function AdminPage() {
                     <Pencil className="h-3.5 w-3.5" /> Edit
                   </button>
                   <button
-                    onClick={() => onDelete(p.id)}
+                    onClick={() => setDeleteId(p.id)}
                     className="flex items-center justify-center gap-1.5 rounded-xl bg-destructive/15 px-3 py-2 text-xs font-semibold text-destructive transition-smooth hover:bg-destructive/25"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -145,6 +149,16 @@ function AdminPage() {
           onSubmit={onSubmit}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteId}
+        title="Delete this project?"
+        description="This action cannot be undone."
+        confirmLabel="Delete"
+        destructive
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteId(null)}
+      />
     </AppShell>
   );
 }
