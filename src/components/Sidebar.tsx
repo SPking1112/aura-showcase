@@ -75,11 +75,11 @@ export function Sidebar({
             })}
           </nav>
 
-          <div className="mt-auto">
+          {/* <div className="mt-auto">
             <div className="glass rounded-2xl p-4 text-xs text-muted-foreground">
               Crafted with care — toggle the theme from the top bar.
             </div>
-          </div>
+          </div> */}
         </div>
       </aside>
     </>

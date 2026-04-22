@@ -31,7 +31,6 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
           <Menu className="h-5 w-5" />
         </button>
         <div>
-          <p className="text-xs text-muted-foreground">Welcome back ✨</p>
           <h1 className="font-display text-lg font-bold leading-tight sm:text-xl">
             {title}
           </h1>
